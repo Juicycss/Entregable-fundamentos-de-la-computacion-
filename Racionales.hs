@@ -73,12 +73,18 @@ instance Num Racional where
     Q s1 (n1 , d1) -> case n of {
         Q s2 (n2 , d2) -> case s1 of {
             Neg -> case s2 of {
-                Neg -> Q Neg ((n1 * d2) + (n2 * d1)); 
-                Pos -> --no se
+                Neg -> Q Neg ((n1 * d2) + (n2 * d1) , d1 * d2 ); 
+                Pos -> case (n1 * d2) > (n2 * d1)  of {
+                    True -> Q Neg ((n1 * d2) + (n2 * d1) , d1 * d2)
+                    False -> Q Pos ((n1 * d2) + (n2 * d1) , d1 * d2)
+                }
                  };
             Pos -> case s2 of {
-                Neg -> -- ??
-                Pos -> Q Pos ((n1 * d2) + (n2 * d1) ) 
+                Neg ->case (n1 * d2) > (n2 * d1)  of {
+                    True -> Q Pos ((n1 * d2) + (n2 * d1) , d1 * d2)
+                    False -> Q Neg ((n1 * d2) + (n2 * d1) , d1 * d2)
+                }
+                Pos -> Q Pos ((n1 * d2) + (n2 * d1) , d1 * d2 ) 
                 }
                  }
                   }
@@ -101,11 +107,17 @@ instance Num Racional where
     Q s1 (n1 , d1) -> case n of {
         Q s2 (n2 , d2) -> case s1 of {
             Neg -> case s2 of {
-                Neg -> -- lo miso aca
+                Neg -> case (n1 * d2) > (n2 * d1)  of {
+                    True -> Q Neg ((n1 * d2) - (n2 * d1) , d1 * d2)
+                    False -> Q Pos ((n1 * d2) - (n2 * d1) , d1 * d2)
+                }
                 Pos -> Q Neg ((n1 * d2) - (n2 * d1) , d1 * d2) };
             Pos -> case s2 of {
                 Neg -> Q Pos ((n1 * d2) - (n2 * d1) , d1 * d2);
-                Pos -> ; -- no se como terminarla
+                Pos -> ; case (n1 * d2) > (n2 * d1)  of {
+                    True -> Q Pos ((n1 * d2) - (n2 * d1) , d1 * d2)
+                    False -> Q Neg ((n1 * d2) - (n2 * d1) , d1 * d2)
+                }
                  }
                  } 
                 } 
