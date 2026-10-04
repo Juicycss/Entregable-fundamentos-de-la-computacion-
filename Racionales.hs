@@ -9,6 +9,41 @@ import Naturales
 data Signo where { Pos :: Signo ; Neg :: Signo } deriving Show
 data Racional where { Q :: Signo -> (N,N) -> Racional } deriving Show
 
+{-#LANGUAGE GADTs #-}
+{-# OPTIONS_GHC -fno-warn-tabs #-}
+{-# OPTIONS_GHC -fno-warn-missing-methods #-}
+
+import Naturales
+
+data Signo where { Pos :: Signo ; Neg :: Signo } deriving Show
+data Racional where { Q :: Signo -> (N,N) -> Racional } deriving Show
+
+instance Eq Signo where
+ (==) = \s s1 -> case s of{
+    Pos -> case s1 of{
+        Pos -> True
+        Neg -> False }
+    Neg -> case s1 of{
+        Pos -> False
+        Neg -> True } }
+
+instance Eq Racional where
+ (==) = \r r1 -> case r of{
+    Q s (n,d) -> case r1 of{
+        Q s1 (n1,d1) -> (s == s1) && (n == n1) && (d == d1) } }
+
+instance Ord Signo where
+    (<=) = \s s1 -> case s of {
+        Pos -> case s1 of {
+            Neg -> False;
+            Pos -> True};
+        Neg -> case s1 of{
+            Pos -> True;
+            Neg -> True
+        }
+        
+    }
+
 instance Eq Signo where
  (==) = \m n -> case m of {
     Pos -> case n of { Pos -> True; Neg -> False };
@@ -75,4 +110,3 @@ instance Num Racional where
                  } 
                 } 
                 }
-                
