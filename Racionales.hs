@@ -1,41 +1,77 @@
+{-#LANGUAGE GADTs #-}
+{-# OPTIONS_GHC -fno-warn-tabs #-}
+{-# OPTIONS_GHC -fno-warn-missing-methods #-}
+
 {- Agustin Bello (360343) Luciano Liori(379030)-}
 
-data Signo where { Pos :: Signo ; Neg :: Signo } deriving Show 
+import Naturales
+
+data Signo where { Pos :: Signo ; Neg :: Signo } deriving Show
 data Racional where { Q :: Signo -> (N,N) -> Racional } deriving Show
 
-(==) :: Signo -> Signo -> Bool -- esto es igual a el igual solo que cambie el true false por neg pos no se si ponerlo asi o como instance Eq singo where
-(==) = \m n -> case m of{
-    Pos -> case n of{
-        Pos -> true;
-        Neg-> false;
-    }
+instance Eq Signo where
+ (==) = \m n -> case m of {
+    Pos -> case n of { Pos -> True; Neg -> False };
+    Neg -> case n of { Pos -> False; Neg -> True } }
 
-    Neg -> case b2 of{
-        Pos -> true;
-        Neg -> true;
-    }
-}
+instance Eq Racional where
+ (==) = \m n -> (m <= n) && (n <= m) -- esto es el 1, hay q remplazarlo con lo tuyo
+ 
 
 instance Ord Racional where
-    (<=) = \m n -> case m of{
-        Q s1 (n1 , d1) -> case n of{ -- sg num 1
-        Q s2 (n2 , d2) -> case s1 of{ -- sg num 2
-
-            Neg -> case s2 of{
+ (<=) = \m n -> case m of {
+    Q s1 (n1 , d1) -> case n of {
+        Q s2 (n2 , d2) -> case s1 of {
+            Neg -> case s2 of {
                 Pos -> True;
-                Neg ->(n1 * d2) <= (n2 *d1);
-            }
-              Pos -> case s2 of{
-                Pos ->(n2 * d1) <= (n1 *d2);
-                Neg -> False;
-            }
-        }
-        } 
-    }
-{- tengo a s1(pos) pasa a ver s2(pos). 
-vuelve a Qs1 al ser negativo, ve casos en n(S2) si es negativo y qs2/n es Pos
-, devuelve true, en caso de que sea negativo, hago denominador comun, y si el numero mas chico
-es el de la izquierda, devuelve true.
+                Neg -> (n2 * d1) <= (n1 * d2) };
+            Pos -> case s2 of {
+                Pos -> (n1 * d2) <= (n2 * d1);
+                Neg -> False } 
+                } 
+                } 
+                }
 
-<= uso esto que ya esta implementado en naturales.
-}
+
+instance Num Racional where
+ (+) = \m n -> case m of {
+    Q s1 (n1 , d1) -> case n of {
+        Q s2 (n2 , d2) -> case s1 of {
+            Neg -> case s2 of {
+                Neg -> Q Neg ((n1 * d2) + (n2 * d1)); 
+                Pos -> --no se
+                 };
+            Pos -> case s2 of {
+                Neg -> -- ??
+                Pos -> Q Pos ((n1 * d2) + (n2 * d1) ) 
+                }
+                 }
+                  }
+                   }
+
+ (*) = \m n -> case m of {
+    Q s1 (n1 , d1) -> case n of {
+        Q s2 (n2 , d2) -> case s1 of {
+            Neg -> case s2 of {
+                Neg -> Q Pos (n1 * n2 , d1 * d2);
+                Pos -> Q Neg (n1 * n2 , d1 * d2) };
+            Pos -> case s2 of {
+                Neg -> Q Neg (n1 * n2 , d1 * d2);
+                Pos -> Q Pos (n1 * n2 , d1 * d2) } 
+                }
+                 }
+                  }
+
+ (-) = \m n -> case m of {
+    Q s1 (n1 , d1) -> case n of {
+        Q s2 (n2 , d2) -> case s1 of {
+            Neg -> case s2 of {
+                Neg -> -- lo miso aca
+                Pos -> Q Neg ((n1 * d2) - (n2 * d1) , d1 * d2) };
+            Pos -> case s2 of {
+                Neg -> Q Pos ((n1 * d2) - (n2 * d1) , d1 * d2);
+                Pos -> ; -- no se como terminarla
+                 }
+                 } 
+                } 
+                }

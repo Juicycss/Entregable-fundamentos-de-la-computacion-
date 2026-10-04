@@ -1,6 +1,8 @@
 {-#LANGUAGE GADTs #-}
 {-# OPTIONS_GHC -fno-warn-tabs #-}
 {-# OPTIONS_GHC -fno-warn-missing-methods #-}
+module Naturales where
+
 
 data N where { O :: N ; S :: N -> N } deriving Show
 
