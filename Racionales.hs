@@ -3,6 +3,7 @@
 {-# OPTIONS_GHC -fno-warn-tabs #-}
 {-# OPTIONS_GHC -fno-warn-missing-methods #-}
 
+module Racionales  where
 import Naturales
 
 data Signo where { Pos :: Signo ; Neg :: Signo } deriving Show
@@ -31,10 +32,10 @@ instance Ord Signo where
             Pos -> True;
             Neg -> True
         }
-        
+
     }
 
- 
+
 
 instance Ord Racional where
  (<=) = \m n -> case m of {
@@ -45,9 +46,9 @@ instance Ord Racional where
                 Neg -> (n2 * d1) <= (n1 * d2) };
             Pos -> case s2 of {
                 Pos -> (n1 * d2) <= (n2 * d1);
-                Neg -> False } 
-                } 
-                } 
+                Neg -> False }
+                }
+                }
                 }
 
 
@@ -56,7 +57,7 @@ instance Num Racional where
     Q s1 (n1 , d1) -> case n of {
         Q s2 (n2 , d2) -> case s1 of {
             Neg -> case s2 of {
-                Neg -> Q Neg ((n1 * d2) + (n2 * d1) , d1 * d2 ); 
+                Neg -> Q Neg ((n1 * d2) + (n2 * d1) , d1 * d2 );
                 Pos -> case (n1 * d2) > (n2 * d1)  of {
                     True -> Q Neg ((n1 * d2) - (n2 * d1) , d1 * d2);
                     False -> Q Pos ((n2 * d1) - (n1 * d2) , d1 * d2)};
@@ -65,7 +66,7 @@ instance Num Racional where
                 Neg ->case (n1 * d2) > (n2 * d1)  of {
                     True -> Q Pos ((n1 * d2) - (n2 * d1) , d1 * d2);
                     False -> Q Neg ((n2 * d1) - (n1 * d2) , d1 * d2)};
-                Pos -> Q Pos ((n1 * d2) + (n2 * d1) , d1 * d2 ) 
+                Pos -> Q Pos ((n1 * d2) + (n2 * d1) , d1 * d2 )
                 }
                  }
                   }
@@ -79,7 +80,7 @@ instance Num Racional where
                 Pos -> Q Neg (n1 * n2 , d1 * d2) };
             Pos -> case s2 of {
                 Neg -> Q Neg (n1 * n2 , d1 * d2);
-                Pos -> Q Pos (n1 * n2 , d1 * d2) } 
+                Pos -> Q Pos (n1 * n2 , d1 * d2) }
                 }
                  }
                   }
@@ -89,15 +90,15 @@ instance Num Racional where
         Q s2 (n2 , d2) -> case s1 of {
             Neg -> case s2 of {
                 Neg -> case (n1 * d2) > (n2 * d1)  of {
-                    True -> Q Neg ((n1 * d2) + (n2 * d1) , d1 * d2);
-                    False -> Q Pos ((n1 * d2) + (n2 * d1) , d1 * d2)};
+                    True -> Q Neg ((n1 * d2) - (n2 * d1) , d1 * d2);
+                    False -> Q Pos ((n2 * d1) - (n1 * d2) , d1 * d2)};
                 Pos -> Q Neg ((n1 * d2) - (n2 * d1) , d1 * d2) };
             Pos -> case s2 of {
-                Neg -> Q Pos ((n1 * d2) - (n2 * d1) , d1 * d2);
+                Neg -> Q Pos ((n1 * d2) + (n2 * d1) , d1 * d2);
                 Pos -> case (n1 * d2) > (n2 * d1)  of {
                     True -> Q Pos ((n1 * d2) - (n2 * d1) , d1 * d2);
-                    False -> Q Neg ((n1 * d2) - (n2 * d1) , d1 * d2)};
+                    False -> Q Neg ((n2 * d1) - (n1 * d2) , d1 * d2)};
                  }
-                 } 
-                } 
+                 }
+                }
                 }
