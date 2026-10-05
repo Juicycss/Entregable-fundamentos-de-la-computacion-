@@ -58,13 +58,13 @@ instance Num Racional where
             Neg -> case s2 of {
                 Neg -> Q Neg ((n1 * d2) + (n2 * d1) , d1 * d2 ); 
                 Pos -> case (n1 * d2) > (n2 * d1)  of {
-                    True -> Q Neg ((n2 * d1) - (n1 * d2) , d1 * d2);
+                    True -> Q Neg ((n1 * d2) - (n2 * d1) , d1 * d2);
                     False -> Q Pos ((n2 * d1) - (n1 * d2) , d1 * d2)};
                  };
             Pos -> case s2 of {
                 Neg ->case (n1 * d2) > (n2 * d1)  of {
                     True -> Q Pos ((n1 * d2) - (n2 * d1) , d1 * d2);
-                    False -> Q Neg ((n1 * d2) - (n2 * d1) , d1 * d2)};
+                    False -> Q Neg ((n2 * d1) - (n1 * d2) , d1 * d2)};
                 Pos -> Q Pos ((n1 * d2) + (n2 * d1) , d1 * d2 ) 
                 }
                  }
